@@ -7,7 +7,36 @@ var app = function(){
   var giniButton = document.getElementById('gini-button');
   giniButton.addEventListener("click", clickGini);
 
+  var dropdown = document.getElementById('countrySelect');
+  var url = "https://restcountries.eu/rest/v2";
+  makeRequest(url, requestDropdownComplete);
+  // dropdown.addEventListener("change", makeRequest)
 }
+
+var requestDropdownComplete = function() {
+// "this" currently refers to XMLHttpRequest object (the event listener puts this to the request object)
+  if(this.status !== 200) return;
+
+  var jsonString = this.responseText;
+  var countries = JSON.parse(jsonString);
+  // var firstCountry = countries[0];
+  // console.log(firstCountry);
+
+  populateDropdownList(countries);
+}
+
+var populateDropdownList = function(countries) {
+  var select = document.getElementById('dropDownSelect');
+
+  countries.forEach(function(country) {
+    var option = document.createElement('option');
+    option.innerText = country.name;
+    select.appendChild(option);
+  });
+}
+
+
+
 
 var clickButton = function(){
   console.log("button was clicked")
