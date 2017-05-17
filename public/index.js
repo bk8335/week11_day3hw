@@ -1,16 +1,47 @@
 var app = function(){
   // var url = "https://restcountries.eu/rest/v2";
   // makeRequest(url, requestComplete);
+
   var countryButton = document.getElementById('country-button');
   countryButton.addEventListener("click", clickButton)
 
   var giniButton = document.getElementById('gini-button');
   giniButton.addEventListener("click", clickGini);
 
-  var dropdown = document.getElementById('countrySelect');
+  var dropdown = document.getElementById('dropDownSelect');
   var url = "https://restcountries.eu/rest/v2";
   makeRequest(url, requestDropdownComplete);
-  // dropdown.addEventListener("change", makeRequest)
+  dropdown.addEventListener("change", handleDropdownChange)
+
+  allCountries = [];
+  makeRequest(url, requestEverything)
+
+  //DISPLAYING THE STORED INFO
+  var storage = JSON.parse(localStorage.getItem("countryStorage")) || {};
+
+ var pTag1 = document.getElementById("countryName");
+ pTag1.innerText = "Country Name: " + storage.name
+
+ var pTag2 = document.getElementById("capitalCity");
+ pTag2.innerText = "Capital: " + storage.capital;
+
+ var pTag3 = document.getElementById("population");
+ pTag3.innerText = "Population: " + storage.population
+
+}
+
+
+var requestEverything = function(){
+  if(this.status !== 200) return;
+  var jsonString = this.responseText;
+  var countries = JSON.parse(jsonString);
+  populateEverything(countries);
+}
+
+var populateEverything = function(countries){
+  countries.forEach(function(country) {
+    allCountries.push(country);
+  });
 }
 
 var requestDropdownComplete = function() {
@@ -33,7 +64,44 @@ var populateDropdownList = function(countries) {
     option.innerText = country.name;
     select.appendChild(option);
   });
+  var storage = JSON.parse(localStorage.getItem("countryStorage")) || {};
+
+  select.selectedIndex = storage.newIndex + 2
+
+
 }
+
+
+
+var handleDropdownChange = function(){
+  // var pTag1 = document.getElementById("countryName");
+  // pTag1.innerText = this.value
+
+  var select = document.getElementById("dropDownSelect")
+  var indexNumber = select.selectedIndex - 2
+  var pTag1 = document.getElementById("countryName");
+  pTag1.innerText = "Country Name: " + allCountries[indexNumber].name
+
+  var pTag2 = document.getElementById("capitalCity");
+  pTag2.innerText = "Capital: " + allCountries[indexNumber].capital;
+
+  var pTag3 = document.getElementById("population");
+  pTag3.innerText = "Population: " + allCountries[indexNumber].population
+  var saveObject = allCountries[indexNumber];
+  saveObject.newIndex = indexNumber
+
+  save(saveObject);
+
+
+}
+
+var save = function(item) {
+
+  var jsonItem = JSON.stringify(item);
+  localStorage.setItem("countryStorage", jsonItem);
+
+}
+
 
 
 
