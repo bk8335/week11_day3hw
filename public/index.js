@@ -80,20 +80,24 @@ var handleDropdownChange = function(){
   var select = document.getElementById("dropDownSelect")
   var indexNumber = select.selectedIndex - 2
   var pTag1 = document.getElementById("countryName");
-  pTag1.innerText = "Country Name: " + allCountries[indexNumber].name
+  pTag1.innerText = "Country Name: " + allCountries[indexNumber].name;
 
   var pTag2 = document.getElementById("capitalCity");
   pTag2.innerText = "Capital: " + allCountries[indexNumber].capital;
 
   var pTag3 = document.getElementById("population");
-  pTag3.innerText = "Population: " + allCountries[indexNumber].population
+  pTag3.innerText = "Population: " + allCountries[indexNumber].population;
+
+  var pTag4 = document.getElementById("gini");
+  pTag4.innerText = "Gini: " + allCountries[indexNumber].gini;
+
   var saveObject = allCountries[indexNumber];
-  saveObject.newIndex = indexNumber
+  saveObject.newIndex = indexNumber;
 
   save(saveObject);
 
-
 }
+
 
 var save = function(item) {
 
